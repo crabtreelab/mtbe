@@ -21,7 +21,7 @@ def get_0psi():
     
     lbls = []
     for r in pred.itertuples():
-        lbls.append(f'MTBE v<sub>t</sub> = {r.vt}<br />{'E' if r.S==1 else 'A'} {r.Ju}<sub>{r.Kau},{r.Kcu}</sub>–{r.Jl}<sub>{r.Kal},{r.Kcl}</sub><br />Calc: {r.freq:.4f} MHz{f'<br /> Obs: {r.exp_freq:.4f} MHz' if r.exp_freq>0 else ''}')
+        lbls.append(f'MTBE v<sub>t</sub> = {r.vt}<br />{"E" if r.S==1 else "A"} {r.Ju}<sub>{r.Kau},{r.Kcu}</sub>–{r.Jl}<sub>{r.Kal},{r.Kcl}</sub><br />Calc: {r.freq:.4f} MHz{f"<br /> Obs: {r.exp_freq:.4f} MHz" if r.exp_freq>0 else ""}')
     
     pred = pred.assign(label=lbls)
     
@@ -41,7 +41,7 @@ def get_40psi():
     
     lbls = []
     for r in pred.itertuples():
-        lbls.append(f'MTBE v<sub>t</sub> = {r.vt}<br />{'E' if r.S==1 else 'A'} {r.Ju}<sub>{r.Kau},{r.Kcu}</sub>–{r.Jl}<sub>{r.Kal},{r.Kcl}</sub><br />Calc: {r.freq:.4f} MHz{f'<br /> Obs: {r.exp_freq:.4f} MHz' if r.exp_freq>0 else ''}')
+        lbls.append(f'MTBE v<sub>t</sub> = {r.vt}<br />{"E" if r.S==1 else "A"} {r.Ju}<sub>{r.Kau},{r.Kcu}</sub>–{r.Jl}<sub>{r.Kal},{r.Kcl}</sub><br />Calc: {r.freq:.4f} MHz{f"<br /> Obs: {r.exp_freq:.4f} MHz" if r.exp_freq>0 else ""}')
     
     pred = pred.assign(label=lbls)
     
@@ -62,7 +62,7 @@ def get_ne():
     
     lbls = []
     for r in pred.itertuples():
-        lbls.append(f'MTBE-{r.species} v<sub>t</sub> = {r.vt}<br />{'E' if r.S==1 else 'A'} {r.Ju}<sub>{r.Kau},{r.Kcu}</sub>–{r.Jl}<sub>{r.Kal},{r.Kcl}</sub><br />Calc: {r.freq:.4f} MHz{f'<br /> Obs: {r.exp_freq:.4f} MHz' if r.exp_freq>0 else ''}')
+        lbls.append(f'MTBE-{r.species} v<sub>t</sub> = {r.vt}<br />{"E" if r.S==1 else "A"} {r.Ju}<sub>{r.Kau},{r.Kcu}</sub>–{r.Jl}<sub>{r.Kal},{r.Kcl}</sub><br />Calc: {r.freq:.4f} MHz{f"<br /> Obs: {r.exp_freq:.4f} MHz" if r.exp_freq>0 else ""}')
     
     pred = pred.assign(label=lbls)
     out['pred']=pred
