@@ -12,17 +12,6 @@ def get_0psi():
     pred = pd.read_csv('data/pred-0psiar.csv')
     model = pd.read_csv('data/model-0psiar.csv')
     
-    pred['int'] = pred['int2']
-    pred=pred.drop(['int2','label','qns'],axis=1)
-    pred['B'] = pred['B']-1
-    pred.rename({'B' : 'vt'},axis=1,inplace=True)
-    
-    lbls = []
-    for r in pred.itertuples():
-        lbls.append(f'MTBE v<sub>t</sub> = {r.vt}<br />{"E" if r.S==1 else "A"} {r.Ju}<sub>{r.Kau},{r.Kcu}</sub>–{r.Jl}<sub>{r.Kal},{r.Kcl}</sub><br />Calc: {r.freq:.4f} MHz{f"<br /> Obs: {r.exp_freq:.4f} MHz" if r.exp_freq>0 else ""}')
-    
-    pred = pred.assign(label=lbls)
-    
     return {'spec':spec,'peaks':peaks,'pred':pred,'model':model}
 
 @st.cache_data
@@ -32,17 +21,6 @@ def get_40psi():
     pred = pd.read_csv('data/pred-40psiar.csv')
     model = pd.read_csv('data/model-40psiar.csv')
     
-    pred['int'] = pred['int2']
-    pred=pred.drop(['int2','label','qns'],axis=1)
-    pred['B'] = pred['B']-1
-    pred.rename({'B' : 'vt'},axis=1,inplace=True)
-    
-    lbls = []
-    for r in pred.itertuples():
-        lbls.append(f'MTBE v<sub>t</sub> = {r.vt}<br />{"E" if r.S==1 else "A"} {r.Ju}<sub>{r.Kau},{r.Kcu}</sub>–{r.Jl}<sub>{r.Kal},{r.Kcl}</sub><br />Calc: {r.freq:.4f} MHz{f"<br /> Obs: {r.exp_freq:.4f} MHz" if r.exp_freq>0 else ""}')
-    
-    pred = pred.assign(label=lbls)
-    
     return {'spec':spec,'peaks':peaks,'pred':pred,'model':model}
 
 @st.cache_data
@@ -51,18 +29,7 @@ def get_ne():
     out['spec'] = pd.read_csv('data/spectrum-ne.csv')
     out['peaks'] = pd.read_csv('data/peaks-ne.csv')
     pred = pd.read_csv('data/pred-isos.csv')
-    for i in ['13c0','13c2','13c3','13c4','18o']:
-        out[f'{i}-model'] = pd.read_csv(f'data/model-{i}.csv')
-    
-    pred=pred.drop(['label','qns'],axis=1)
-    pred['B'] = pred['B']-1
-    pred.rename({'B' : 'vt'},axis=1,inplace=True)
-    
-    lbls = []
-    for r in pred.itertuples():
-        lbls.append(f'MTBE-{r.species} v<sub>t</sub> = {r.vt}<br />{"E" if r.S==1 else "A"} {r.Ju}<sub>{r.Kau},{r.Kcu}</sub>–{r.Jl}<sub>{r.Kal},{r.Kcl}</sub><br />Calc: {r.freq:.4f} MHz{f"<br /> Obs: {r.exp_freq:.4f} MHz" if r.exp_freq>0 else ""}')
-    
-    pred = pred.assign(label=lbls)
+    out['model-isos'] = pd.read_csv(f'data/model-isos.csv')
     out['pred']=pred
     return out
 
@@ -109,7 +76,7 @@ color = data_ne['pred']['species'].map(color_dict)
 
 fig3=go.Figure(go.Scatter(x=data_ne['spec'].freq, y=data_ne['spec'].int,mode='lines',name='Experiment',hoverinfo='skip'))
 for i in ['13c0','13c2','13c3','13c4','18o']:
-    fig3.add_trace(go.Scatter(x=data_ne[f'{i}-model'].freq, y=data_ne[f'{i}-model'].int,mode='lines',name=f'Simulation-{i}',hoverinfo='skip'))
+    fig3.add_trace(go.Scatter(x=data_ne[f'model-isos'].freq, y=data_ne[f'model-isos'][i],mode='lines',name=f'Simulation-{i}',hoverinfo='skip'))
 fig3.add_trace(go.Scatter(x=data_ne['peaks']['$x_0$'],y=data_ne['peaks']['A'],name='Peaks',mode='markers',hovertemplate='%{x:.4f} MHz<br />A: %{y:.3f}',legendgroup='peaks'))
 fig3.add_trace(go.Bar(x=data_ne['peaks']['$x_0$'],y=data_ne['peaks']['A'],width=0.005,showlegend=False,hoverinfo='skip',legendgroup='peaks'))
 fig3.add_trace(go.Scatter(x=data_ne['pred'].freq,y=-data_ne['pred'].int,name='Transitions',mode='markers',marker_color=color,
